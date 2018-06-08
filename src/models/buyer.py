@@ -1,0 +1,3 @@
+
+class Buyer(object):
+    pass

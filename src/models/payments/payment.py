@@ -2,9 +2,12 @@ import uuid
 from src.common.database import Database
 
 class Payment(object):
-    def __init__(self, client_id, payment_type, _id=None):
+    def __init__(self, client_id, buyer, amount, payment_type, card, _id=None):
         self.client_id = client_id
+        self.buyer = buyer
+        self.amount = amount
         self.payment_type = payment_type
+        self.card = card
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def save(self):
@@ -14,11 +17,12 @@ class Payment(object):
     def json(self):
         return {
             'client_id': self.client_id,
+            'amount': self.amount,
             'payment_type': self.payment_type,
             '_id': self._id
         }
 
-    def payment_valid(self):
+    def is_payment_valid(self):
         pass
 
     @staticmethod

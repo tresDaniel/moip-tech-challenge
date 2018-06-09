@@ -1,15 +1,13 @@
 import uuid
 from src.common.database import Database
-from src.models.payment import Payment
+from src.models.payments.payment import Payment
 
 class Client(object):
     def __init__(self, _id=None):
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def new_payment(self, payment_type):
-        payment = Payment(client_id=self._id, payment_type=payment_type)
-
-        payment.process_payment(payment_type)
+        pass
 
     def save(self):
         Database.insert(collection='clients', 

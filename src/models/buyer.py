@@ -3,8 +3,7 @@ from src.common.database import Database
 
 
 class Buyer(object):
-    def __init__(self, client_id, name, email, cpf, _id=None):
-        self.client_id = client_id,
+    def __init__(self, name, email, cpf, _id=None):
         self.name = name,
         self.email = email,
         self.cpf = cpf,
@@ -16,7 +15,6 @@ class Buyer(object):
 
     def json(self):
         return {
-            'client_id': self.client_id,
             'name': self.name,
             'email': self.email,
             'cpf': self.cpf,
@@ -27,11 +25,6 @@ class Buyer(object):
     def from_db(cls, id):
         client_data = Database.find_one(collection='buyers', query={'_id': id})
         return cls(**client_data)
-
-    @classmethod
-    def from_client(cls, id):
-        buyer_data = Database.find_one(collection='buyers', query={'client_id': id})
-        return cls(**buyer_data)
 
     @staticmethod
     def list_all(id):

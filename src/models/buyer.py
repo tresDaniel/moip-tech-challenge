@@ -28,4 +28,4 @@ class Buyer(object):
 
     @staticmethod
     def list_all(id):
-        return [client for client in Database.find(collection='buyers', query={'buyer_id' : id})]
+        return [client for client in Database.find(collection='buyers', query={'buyer_id': id})]

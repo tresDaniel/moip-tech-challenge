@@ -1,5 +1,7 @@
 import uuid
 from src.common.database import Database
+from src.common.utils import Utils
+
 
 class Payment(object):
     def __init__(self, client_id, buyer, amount, payment_type, card, _id=None):
@@ -30,14 +32,14 @@ class Payment(object):
         if(payment_type == ''):
             pass
 
-    def boleto_payment(self):
-        return {
-            ''
-        }
+    @staticmethod
+    def boleto_payment():
+        boleto_code = Utils.generate_boleto()
+        return boleto_code
 
     def register_payment(self):
         pass
-    
+
     @classmethod
     def get_by_id(cls, id):
         payment_data = Database.find_one(collection='payments', query={'_id': id})

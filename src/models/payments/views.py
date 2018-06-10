@@ -1,7 +1,9 @@
-from flask import Blueprint, request, session, url_for
+from flask import Blueprint, request, url_for
 from werkzeug.utils import redirect
+from src.models.payments.payment import Payment
 
 payment_blueprint = Blueprint('payments', __name__)
+
 
 @payment_blueprint.route('/payment', methods=['POST'])
 def payment():
@@ -18,9 +20,11 @@ def payment():
         elif payment_type == 'Card':
             return redirect(url_for(".card_payment"))
 
+
 @payment_blueprint.route('/boleto')
 def boleto_payment():
-    return "12323424242342442"
+    return Payment.boleto_payment()
+
 
 @payment_blueprint.route('/card')
 def card_payment():

@@ -20,7 +20,7 @@ def payment():
 
         buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
 
-        # payment_amount = request.form['amount']
+        payment_amount = request.form['amount']
         payment_type = request.form['type']
 
         if payment_type == 'Boleto':
@@ -31,11 +31,11 @@ def payment():
             card_expiration_date = request.form['expiration_date']
             card_cvv = request.form['card_cvv']
 
-            Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
+            card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
 
-            Payment.is_payment_valid(card_number)
+            payment_status = Payment.register_payment(buyer, payment_type, payment_amount, card)
 
-            return redirect(url_for(".card_payment"))
+            return redirect(url_for(".card_payment", status=payment_status))
 
 
 @payment_blueprint.route('/boleto')
@@ -45,12 +45,8 @@ def boleto_payment():
     return boleto_number
 
 
-@payment_blueprint.route('/card')
-def card_payment():
-    if Payment.is_payment_valid():
-        Payment.register_payment()
-
-        return "Payment valid!"
-    return "Payment not valid!"
+@payment_blueprint.route('/card/<status>')
+def card_payment(status):
+    return status;
 
 

@@ -1,7 +1,6 @@
 import uuid
 from src.common.database import Database
 from src.common.utils import Utils
-from src.models.buyer import Buyer
 
 
 class Payment(object):
@@ -20,8 +19,10 @@ class Payment(object):
     def json(self):
         return {
             'client_id': self.client_id,
+            'buyer': self.buyer,
             'amount': self.amount,
             'payment_type': self.payment_type,
+            'card': self.card,
             '_id': self._id
         }
 
@@ -37,9 +38,14 @@ class Payment(object):
         boleto_code = Utils.generate_boleto()
         return boleto_code
 
-    def register_payment(self):
-        Buycpfer.find_by_cpf()
-        pass
+    @staticmethod
+    def register_payment(buyer, payment_type, payment_amount, card):
+        if Payment.is_payment_valid(card.card_number):
+            Payment(buyer, payment_type, payment_amount, card)
+            return "success"
+        else:
+            return "fail"
+
 
     @classmethod
     def get_by_id(cls, id):
@@ -48,5 +54,5 @@ class Payment(object):
 
     @classmethod
     def find_by_client_id(cls, client_id):
-        payments = Database.find(collection='payments', query={'client_id' : client_id})
+        payments = Database.find(collection='payments', query={'client_id': client_id})
         return [cls(**payment) for payment in payments]

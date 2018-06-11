@@ -28,6 +28,7 @@ class Buyer(object):
             return buyer
         else:
             buyer = Buyer(name, email, cpf)
+            buyer.save()
             return buyer
 
     @classmethod

@@ -24,15 +24,19 @@ class Card(object):
         }
 
     @classmethod
-    def check_card(cls, card_holder_name, card_number, card_expiration_date, card_cvv):
+    def check_cards(cls, card_holder_name, card_number, card_expiration_date, card_cvv):
         if not Card.find_by_card_number(card_number):
             card = Card.find_by_card_number(card_number)
             return card
         else:
             card = Card(card_holder_name, card_number, card_expiration_date, card_cvv)
+            card.save()
             return card
 
     @classmethod
     def find_by_card_number(cls, card_number):
         card_number = Database.find_one(collection='cards', query={'card_number': card_number})
-        return cls(**card_number)
+        if card_number:
+            return cls(**card_number)
+        else:
+            return None

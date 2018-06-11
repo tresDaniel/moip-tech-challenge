@@ -33,7 +33,10 @@ class Buyer(object):
     @classmethod
     def find_by_cpf(cls, cpf):
         buyer_data = Database.find_one(collection='buyers', query={'cpf': cpf})
-        return cls(**buyer_data)
+        if buyer_data:
+            return cls(**buyer_data)
+        else:
+            return None
 
     @staticmethod
     def list_all(id):

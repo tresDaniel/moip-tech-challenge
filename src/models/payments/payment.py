@@ -1,6 +1,7 @@
 import uuid
 from src.common.database import Database
 from src.common.utils import Utils
+from src.models.buyer import Buyer
 
 
 class Payment(object):
@@ -24,13 +25,12 @@ class Payment(object):
             '_id': self._id
         }
 
-    def is_payment_valid(self):
-        pass
-
     @staticmethod
-    def process_payment(payment_type):
-        if(payment_type == ''):
-            pass
+    def is_payment_valid(card_number):
+        if card_number % 2 == 0:
+            return True
+        else:
+            return False
 
     @staticmethod
     def boleto_payment():
@@ -38,6 +38,7 @@ class Payment(object):
         return boleto_code
 
     def register_payment(self):
+        Buycpfer.find_by_cpf()
         pass
 
     @classmethod

@@ -20,12 +20,21 @@ class Buyer(object):
             'cpf': self.cpf,
             '_id': self._id
         }
-    
+
     @classmethod
-    def from_db(cls, id):
-        client_data = Database.find_one(collection='buyers', query={'_id': id})
-        return cls(**client_data)
+    def check_buyers(cls, name, email, cpf):
+        if Buyer.find_by_cpf(cpf):
+            buyer = Buyer.find_by_cpf(cpf)
+            return buyer
+        else:
+            buyer = Buyer(name, email, cpf)
+            return buyer
+
+    @classmethod
+    def find_by_cpf(cls, cpf):
+        buyer_data = Database.find_one(collection='buyers', query={'cpf': cpf})
+        return cls(**buyer_data)
 
     @staticmethod
     def list_all(id):
-        return [client for client in Database.find(collection='buyers', query={'buyer_id': id})]
+        return [buyer for buyer in Database.find(collection='buyers', query={'buyer_id': id})]

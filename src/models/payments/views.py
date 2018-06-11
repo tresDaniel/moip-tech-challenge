@@ -1,5 +1,8 @@
 from flask import Blueprint, request, url_for
 from werkzeug.utils import redirect
+
+from src.models.buyer import Buyer
+from src.models.card import Card
 from src.models.payments.payment import Payment
 
 payment_blueprint = Blueprint('payments', __name__)
@@ -9,25 +12,45 @@ payment_blueprint = Blueprint('payments', __name__)
 def payment():
     if request.method == 'POST':
 
-        # buyer_name = request.form['name']
-        # buyer_email = request.form['email']
-        # buyer_cpf = request.form['cpf']
+        # client_id = session['client_id']
 
+        buyer_name = request.form['name']
+        buyer_email = request.form['email']
+        buyer_cpf = request.form['cpf']
+
+        buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
+
+        # payment_amount = request.form['amount']
         payment_type = request.form['type']
 
         if payment_type == 'Boleto':
             return redirect(url_for(".boleto_payment"))
         elif payment_type == 'Card':
+            card_holder_name = request.form['holder_name']
+            card_number = request.form['number']
+            card_expiration_date = request.form['expiration_date']
+            card_cvv = request.form['card_cvv']
+
+            Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
+
+            Payment.is_payment_valid(card_number)
+
             return redirect(url_for(".card_payment"))
 
 
 @payment_blueprint.route('/boleto')
 def boleto_payment():
-    return Payment.boleto_payment()
+    boleto_number = Payment.boleto_payment()
+
+    return boleto_number
 
 
 @payment_blueprint.route('/card')
 def card_payment():
-    return "Card Payment"
+    if Payment.is_payment_valid():
+        Payment.register_payment()
+
+        return "Payment valid!"
+    return "Payment not valid!"
 
 

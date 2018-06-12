@@ -16,3 +16,7 @@ class Utils(object):
                Utils.random_with_n_digits(1) + " " + Utils.random_with_n_digits(15)
 
         return boleto_number
+
+    @staticmethod
+    def validate_cpf(cpf):
+        pass

@@ -41,7 +41,7 @@ class Payment(object):
     @staticmethod
     def register_payment(client_id, buyer, payment_type, payment_amount, card):
         if Payment.is_payment_valid(card.card_number):
-            payment = Payment(client_id, buyer, payment_amount, payment_type, card)
+            payment = Payment(client_id, buyer.json(), payment_amount, payment_type, card.json())
             payment.save()
             return "Your payment was successful."
         else:

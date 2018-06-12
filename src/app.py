@@ -1,5 +1,3 @@
-import uuid
-
 from flask import Flask, session
 from src.common.database import Database
 
@@ -10,8 +8,8 @@ app.secret_key = "Ab6C4D3Ef"
 
 @app.before_first_request
 def init():
-    session['client_id'] = uuid.uuid4().hex
     Database.initialize()
+    session['client_id'] = '0x4D3EfAb6C'
 
 
 from src.models.payments.views import payment_blueprint

@@ -28,7 +28,7 @@ class Payment(object):
 
     @staticmethod
     def is_payment_valid(card_number):
-        if card_number % 2 == 0:
+        if int(card_number) % 2 == 0:
             return True
         else:
             return False
@@ -39,13 +39,13 @@ class Payment(object):
         return boleto_code
 
     @staticmethod
-    def register_payment(buyer, payment_type, payment_amount, card):
+    def register_payment(client_id, buyer, payment_type, payment_amount, card):
         if Payment.is_payment_valid(card.card_number):
-            Payment(buyer, payment_type, payment_amount, card)
-            return "success"
+            payment = Payment(client_id, buyer, payment_amount, payment_type, card)
+            payment.save()
+            return "Your payment was successful."
         else:
-            return "fail"
-
+            return "Your payment has failed."
 
     @classmethod
     def get_by_id(cls, id):

@@ -25,7 +25,7 @@ class Card(object):
 
     @classmethod
     def check_cards(cls, card_holder_name, card_number, card_expiration_date, card_cvv):
-        if not Card.find_by_card_number(card_number):
+        if Card.find_by_card_number(card_number):
             card = Card.find_by_card_number(card_number)
             return card
         else:

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, url_for
+from flask import Blueprint, request, url_for, session
 from werkzeug.utils import redirect
 
 from src.models.buyer import Buyer
@@ -12,7 +12,7 @@ payment_blueprint = Blueprint('payments', __name__)
 def payment():
     if request.method == 'POST':
 
-        # client_id = session['client_id']
+        client_id = session['client_id']
 
         buyer_name = request.form['name']
         buyer_email = request.form['email']
@@ -33,7 +33,7 @@ def payment():
 
             card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
 
-            payment_status = Payment.register_payment(buyer, payment_type, payment_amount, card)
+            payment_status = Payment.register_payment(client_id, buyer, payment_type, payment_amount, card)
 
             return redirect(url_for(".card_payment", status=payment_status))
 
@@ -47,6 +47,6 @@ def boleto_payment():
 
 @payment_blueprint.route('/card/<status>')
 def card_payment(status):
-    return status;
+    return status
 
 

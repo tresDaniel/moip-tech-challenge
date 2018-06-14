@@ -1,5 +1,6 @@
 import uuid
 from src.common.database import Database
+from src.common.utils import Utils
 
 
 class Buyer(object):
@@ -23,13 +24,14 @@ class Buyer(object):
 
     @classmethod
     def check_buyers(cls, name, email, cpf):
-        if Buyer.find_by_cpf(cpf):
-            buyer = Buyer.find_by_cpf(cpf)
-            return buyer
-        else:
-            buyer = Buyer(name, email, cpf)
-            buyer.save()
-            return buyer
+        if Utils.validate_cpf(cpf):
+            if Buyer.find_by_cpf(cpf):
+                buyer = Buyer.find_by_cpf(cpf)
+                return buyer
+            else:
+                buyer = Buyer(name, email, cpf)
+                buyer.save()
+                return buyer
 
     @classmethod
     def find_by_cpf(cls, cpf):

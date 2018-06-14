@@ -43,9 +43,9 @@ class Payment(object):
         if Payment.is_payment_valid(card.card_number):
             payment = Payment(client_id, buyer.json(), payment_amount, payment_type, card.json())
             payment.save()
-            return "Your payment was successful."
+            return "success"
         else:
-            return "Your payment has failed."
+            return "fail"
 
     @classmethod
     def get_by_id(cls, id):

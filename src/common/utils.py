@@ -39,3 +39,9 @@ class Utils(object):
             return cpf
 
         return False
+
+    @staticmethod
+    def validate_email(email):
+        email_re = re.compile('^[\w-]+@([\w-]+\.)+[\w]+$')
+
+        return email if email_re.match(email) else False

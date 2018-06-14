@@ -1,7 +1,8 @@
 from flask import Blueprint, request, url_for, session
 from werkzeug.utils import redirect
 
-from src.models.buyer import Buyer
+from src.common.utils import Utils
+from src.models.buyer import Buyer, Errors
 from src.models.card import Card
 from src.models.payments.payment import Payment
 
@@ -15,10 +16,13 @@ def payment():
         client_id = session['client_id']
 
         buyer_name = request.form['name']
-        buyer_email = request.form['email']
-        buyer_cpf = request.form['cpf']
+        buyer_email = Utils.validate_email(request.form['email'])
+        buyer_cpf = Utils.validate_cpf(request.form['cpf'])
 
-        buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
+        try:
+            buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
+        except Errors.Error as e:
+            return e.message
 
         payment_amount = request.form['amount']
         payment_type = request.form['type']
@@ -47,6 +51,10 @@ def boleto_payment():
 
 @payment_blueprint.route('/card/<status>')
 def card_payment(status):
-    return status
+    if status == 'success':
+        return "Your payment was successful."
+    elif status == 'fail':
+        return "Your payment has failed."
+
 
 

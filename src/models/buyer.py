@@ -23,17 +23,17 @@ class Buyer(object):
         }
 
     @classmethod
-    def check_buyers(cls, name, email, cpf):
-        if cpf is False:
+    def check_buyers(cls, temp_buyer):
+        if temp_buyer.cpf is False:
             raise Errors.InvalidCpfError("The informed CPF is not valid.")
-        elif email is False:
+        elif temp_buyer.email is False:
             raise Errors.InvalidEmailError("The informed email is not valid.")
 
-        if Buyer.find_by_cpf(cpf):
-            buyer = Buyer.find_by_cpf(cpf)
+        if Buyer.find_by_cpf(temp_buyer.cpf):
+            buyer = Buyer.find_by_cpf(temp_buyer.cpf)
             return buyer
         else:
-            buyer = Buyer(name, email, cpf)
+            buyer = Buyer(temp_buyer.name, temp_buyer.email, temp_buyer.cpf)
             buyer.save()
             return buyer
 
@@ -44,7 +44,3 @@ class Buyer(object):
             return cls(**buyer_data)
         else:
             return None
-
-    @staticmethod
-    def list_all(id):
-        return [buyer for buyer in Database.find(collection='buyers', query={'buyer_id': id})]

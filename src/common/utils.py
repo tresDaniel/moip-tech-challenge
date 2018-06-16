@@ -20,25 +20,33 @@ class Utils(object):
 
     @staticmethod
     def validate_cpf(cpf):
-        cpf = ''.join(re.findall(r'\d', str(cpf)))
+        temp_cpf = ''.join(re.findall(r'\d', str(cpf)))
 
-        if not cpf or len(cpf) < 11:
+        if not temp_cpf or len(temp_cpf) < 11:
             return False
 
-        buyer_cpf = [int(d) for d in cpf]
+        buyer_cpf = [int(d) for d in temp_cpf]
 
         verified_cpf = buyer_cpf[:9]
+
         while len(verified_cpf) < 11:
-            residue = sum([v * (len(verified_cpf) + 1 - i) for i, v in enumerate(verified_cpf)]) % 11
-
-            check_digit = 0 if residue <= 1 else 11 - residue
-
-            verified_cpf.append(check_digit)
+            verified_cpf = Utils.append_cpf_residue(verified_cpf)
 
         if verified_cpf == buyer_cpf:
             return cpf
 
         return False
+
+    @staticmethod
+    def get_cpf_residue(verified_cpf):
+        return sum([v * (len(verified_cpf) + 1 - i) for i, v in enumerate(verified_cpf)]) % 11
+
+    @staticmethod
+    def append_cpf_residue(verified_cpf):
+        residue = Utils.get_cpf_residue(verified_cpf)
+        check_digit = 0 if residue <= 1 else 11 - residue
+        verified_cpf.append(check_digit)
+        return verified_cpf
 
     @staticmethod
     def validate_email(email):

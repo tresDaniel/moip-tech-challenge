@@ -25,15 +25,15 @@ class Card(object):
         }
 
     @classmethod
-    def check_cards(cls, card_holder_name, card_number, card_expiration_date, card_cvv):
-        if card_number is False:
+    def check_cards(cls, temp_card):
+        if temp_card.card_number is False:
             raise Errors.InvalidCpfError("The informed card is not valid.")
 
-        if Card.find_by_card_number(card_number):
-            card = Card.find_by_card_number(card_number)
+        if Card.find_by_card_number(temp_card.card_number):
+            card = Card.find_by_card_number(temp_card.card_number)
             return card
         else:
-            card = Card(card_holder_name, card_number, card_expiration_date, card_cvv)
+            card = Card(temp_card.card_holder_name, temp_card.card_number, temp_card.card_expiration_date, temp_card.card_cvv)
             card.save()
             return card
 

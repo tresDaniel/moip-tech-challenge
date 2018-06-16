@@ -15,32 +15,35 @@ def payment():
 
         client_id = session['client_id']
 
-        buyer_name = request.form['name']
-        buyer_email = Utils.validate_email(request.form['email'])
-        buyer_cpf = Utils.validate_cpf(request.form['cpf'])
+        buyer_name = request.form['buyer_name']
+        buyer_email = Utils.validate_email(request.form['buyer_email'])
+        buyer_cpf = Utils.validate_cpf(request.form['buyer_cpf'])
 
         try:
-            buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
+            temp_buyer = Buyer(buyer_name, buyer_email, buyer_cpf)
+            buyer = Buyer.check_buyers(temp_buyer)
         except Errors.Error as e:
             return e.message
 
-        payment_amount = request.form['amount']
-        payment_type = request.form['type']
+        payment_amount = request.form['payment_amount']
+        payment_type = request.form['payment_type']
 
         if payment_type == 'Boleto':
             return redirect(url_for(".boleto_payment"))
         elif payment_type == 'Card':
-            card_holder_name = request.form['holder_name']
-            card_number = Utils.validate_card(request.form['number'])
-            card_expiration_date = request.form['expiration_date']
+            card_holder_name = request.form['card_holder_name']
+            card_number = Utils.validate_card(request.form['card_number'])
+            card_expiration_date = request.form['card_expiration_date']
             card_cvv = request.form['card_cvv']
 
             try:
-                card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
+                temp_card = Card(card_holder_name, card_number, card_expiration_date, card_cvv)
+                card = Card.check_cards(temp_card)
             except Errors.Error as e:
                 return e.message
 
-            payment_status = Payment.register_payment(client_id, buyer, payment_type, payment_amount, card)
+            payment = Payment(client_id, payment_type, payment_amount, buyer, card)
+            payment_status = Payment.register_payment(payment)
 
             return redirect(url_for(".card_payment", status=payment_status))
 

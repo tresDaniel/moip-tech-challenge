@@ -4,11 +4,11 @@ from src.common.utils import Utils
 
 
 class Payment(object):
-    def __init__(self, client_id, buyer, amount, payment_type, card, _id=None):
+    def __init__(self, client_id, payment_type, payment_amount, buyer, card, _id=None):
         self.client_id = client_id
-        self.buyer = buyer
-        self.amount = amount
         self.payment_type = payment_type
+        self.payment_amount = payment_amount
+        self.buyer = buyer
         self.card = card
         self._id = uuid.uuid4().hex if _id is None else _id
 
@@ -19,9 +19,9 @@ class Payment(object):
     def json(self):
         return {
             'client_id': self.client_id,
-            'buyer': self.buyer,
-            'amount': self.amount,
             'payment_type': self.payment_type,
+            'payment_amount': self.payment_amount,
+            'buyer': self.buyer,
             'card': self.card,
             '_id': self._id
         }
@@ -39,9 +39,9 @@ class Payment(object):
         return boleto_code
 
     @staticmethod
-    def register_payment(client_id, buyer, payment_type, payment_amount, card):
-        if Payment.is_payment_valid(card.card_number):
-            payment = Payment(client_id, buyer.json(), payment_amount, payment_type, card.json())
+    def register_payment(payment):
+        if Payment.is_payment_valid(payment.card.card_number):
+            payment = Payment(payment.client_id, payment.payment_type, payment.payment_amount, payment.buyer.json(), payment.card.json())
             payment.save()
             return "success"
         else:

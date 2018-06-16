@@ -25,9 +25,9 @@ class Buyer(object):
     @classmethod
     def check_buyers(cls, name, email, cpf):
         if cpf is False:
-            raise Errors.InvalidCpfError("The CPF informed is not valid.")
+            raise Errors.InvalidCpfError("The informed CPF is not valid.")
         elif email is False:
-            raise Errors.InvalidEmailError("The email informed is not valid.")
+            raise Errors.InvalidEmailError("The informed email is not valid.")
 
         if Buyer.find_by_cpf(cpf):
             buyer = Buyer.find_by_cpf(cpf)

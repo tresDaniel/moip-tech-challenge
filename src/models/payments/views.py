@@ -31,11 +31,14 @@ def payment():
             return redirect(url_for(".boleto_payment"))
         elif payment_type == 'Card':
             card_holder_name = request.form['holder_name']
-            card_number = request.form['number']
+            card_number = Utils.validate_card(request.form['number'])
             card_expiration_date = request.form['expiration_date']
             card_cvv = request.form['card_cvv']
 
-            card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
+            try:
+                card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
+            except Errors.Error as e:
+                return e.message
 
             payment_status = Payment.register_payment(client_id, buyer, payment_type, payment_amount, card)
 

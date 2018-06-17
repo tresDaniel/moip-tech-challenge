@@ -43,7 +43,7 @@ def payment():
                 return e.message
 
             payment = Payment(client_id, payment_type, payment_amount, buyer, card)
-            payment_status = Payment.register_payment(payment)
+            payment_status = Payment.register(payment)
 
             return redirect(url_for(".card_payment", status=payment_status))
 

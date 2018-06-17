@@ -5,18 +5,18 @@ from random import randint
 class Utils(object):
 
     @staticmethod
-    def random_with_n_digits(n):
+    def __generate_boleto():
+        boleto_number = Utils.__random_with_n_digits(5) + "." + Utils.__random_with_n_digits(5) + " " + Utils.__random_with_n_digits(5) + "." + \
+                   Utils.__random_with_n_digits(6) + " " + Utils.__random_with_n_digits(5) + "." + Utils.__random_with_n_digits(6) + " " + \
+                   Utils.__random_with_n_digits(1) + " " + Utils.__random_with_n_digits(15)
+
+        return boleto_number
+
+    @staticmethod
+    def __random_with_n_digits(n):
         range_start = 10 ** (n - 1)
         range_end = (10 ** n) - 1
         return str(randint(range_start, range_end))
-
-    @staticmethod
-    def generate_boleto():
-        boleto_number = Utils.random_with_n_digits(5) + "." + Utils.random_with_n_digits(5) + " " + Utils.random_with_n_digits(5) + "." + \
-               Utils.random_with_n_digits(6) + " " + Utils.random_with_n_digits(5) + "." + Utils.random_with_n_digits(6) + " " + \
-               Utils.random_with_n_digits(1) + " " + Utils.random_with_n_digits(15)
-
-        return boleto_number
 
     @staticmethod
     def validate_cpf(cpf):
@@ -30,7 +30,7 @@ class Utils(object):
         verified_cpf = buyer_cpf[:9]
 
         while len(verified_cpf) < 11:
-            verified_cpf = Utils.append_cpf_residue(verified_cpf)
+            verified_cpf = Utils.__append_cpf_residue(verified_cpf)
 
         if verified_cpf == buyer_cpf:
             return cpf
@@ -38,15 +38,15 @@ class Utils(object):
         return False
 
     @staticmethod
-    def get_cpf_residue(verified_cpf):
-        return sum([v * (len(verified_cpf) + 1 - i) for i, v in enumerate(verified_cpf)]) % 11
-
-    @staticmethod
-    def append_cpf_residue(verified_cpf):
-        residue = Utils.get_cpf_residue(verified_cpf)
+    def __append_cpf_residue(verified_cpf):
+        residue = Utils.__get_cpf_residue(verified_cpf)
         check_digit = 0 if residue <= 1 else 11 - residue
         verified_cpf.append(check_digit)
         return verified_cpf
+
+    @staticmethod
+    def __get_cpf_residue(verified_cpf):
+        return sum([v * (len(verified_cpf) + 1 - i) for i, v in enumerate(verified_cpf)]) % 11
 
     @staticmethod
     def validate_email(email):
@@ -56,7 +56,7 @@ class Utils(object):
 
     @staticmethod
     def validate_card(card_number):
-        card = Utils.treat_card_number(card_number)
+        card = Utils.__treat_card_number(card_number)
 
         odd_card = card[:len(card) - 1]
         even_numbers = card[1::2]
@@ -82,18 +82,7 @@ class Utils(object):
             return False
 
     @staticmethod
-    def get_card_issuer(card_number):
-        card = Utils.treat_card_number(card_number)
-
-        if card[0] == 4:
-            return 'Visa'
-        elif card[0] == 5 and 0 < card[1] <= 5:
-            return 'Mastercard'
-        else:
-            return 'Others'
-
-    @staticmethod
-    def treat_card_number(card_number):
+    def __treat_card_number(card_number):
         card_number = ''.join(re.findall(r'\d', str(card_number)))
 
         if not card_number or (len(card_number) < 12 or len(card_number) > 16):
@@ -102,3 +91,14 @@ class Utils(object):
         card = [int(d) for d in card_number]
 
         return card
+
+    @staticmethod
+    def get_card_issuer(card_number):
+        card = Utils.__treat_card_number(card_number)
+
+        if card[0] == 4:
+            return 'Visa'
+        elif card[0] == 5 and 0 < card[1] <= 5:
+            return 'Mastercard'
+        else:
+            return 'Others'

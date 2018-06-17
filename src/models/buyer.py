@@ -10,7 +10,7 @@ class Buyer(object):
         self.cpf = cpf,
         self._id = uuid.uuid4().hex if _id is None else _id
 
-    def save(self):
+    def __save(self):
         Database.insert(collection='buyers', 
                         data=self.json())
 
@@ -29,16 +29,20 @@ class Buyer(object):
         elif temp_buyer.email is False:
             raise Errors.InvalidEmailError("The informed email is not valid.")
 
-        if Buyer.find_by_cpf(temp_buyer.cpf):
-            buyer = Buyer.find_by_cpf(temp_buyer.cpf)
+        if Buyer.__find_by_cpf(temp_buyer.cpf):
+            buyer = Buyer.__find_by_cpf(temp_buyer.cpf)
             return buyer
         else:
-            buyer = Buyer(temp_buyer.name, temp_buyer.email, temp_buyer.cpf)
-            buyer.save()
+            buyer = Buyer.__register(temp_buyer)
             return buyer
 
+    def __register(self):
+        buyer = Buyer(self.name, self.email, self.cpf)
+        buyer.__save()
+        return buyer
+
     @classmethod
-    def find_by_cpf(cls, cpf):
+    def __find_by_cpf(cls, cpf):
         buyer_data = Database.find_one(collection='buyers', query={'cpf': cpf})
         if buyer_data:
             return cls(**buyer_data)

@@ -1,4 +1,4 @@
-import uuid
+import uuid, re
 from src.common.database import Database
 from src.common.utils import Utils
 
@@ -12,7 +12,7 @@ class Payment(object):
         self.card = card
         self._id = uuid.uuid4().hex if _id is None else _id
 
-    def save(self):
+    def __save(self):
         Database.insert(collection='payments', 
                         data=self.json())
 
@@ -26,8 +26,17 @@ class Payment(object):
             '_id': self._id
         }
 
+    def register(self):
+        if Payment.__is_payment_valid(self.card.card_number):
+            payment = Payment(self.client_id, self.payment_type, self.payment_amount, self.buyer.json(), self.card.json())
+            payment.__save()
+            return "success"
+        else:
+            return "fail"
+
     @staticmethod
-    def is_payment_valid(card_number):
+    def __is_payment_valid(card_number):
+        card_number = ''.join(re.findall(r'\d', str(card_number)))
         if int(card_number) % 2 == 0:
             return True
         else:
@@ -35,17 +44,8 @@ class Payment(object):
 
     @staticmethod
     def boleto_payment():
-        boleto_code = Utils.generate_boleto()
+        boleto_code = Utils.__generate_boleto()
         return boleto_code
-
-    @staticmethod
-    def register_payment(payment):
-        if Payment.is_payment_valid(payment.card.card_number):
-            payment = Payment(payment.client_id, payment.payment_type, payment.payment_amount, payment.buyer.json(), payment.card.json())
-            payment.save()
-            return "success"
-        else:
-            return "fail"
 
     @classmethod
     def get_by_id(cls, id):

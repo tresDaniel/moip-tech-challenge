@@ -20,12 +20,12 @@ class Utils(object):
 
     @staticmethod
     def validate_cpf(cpf):
-        temp_cpf = ''.join(re.findall(r'\d', str(cpf)))
+        cpf = ''.join(re.findall(r'\d', str(cpf)))
 
-        if not temp_cpf or len(temp_cpf) < 11:
+        if not cpf or len(cpf) != 11:
             return False
 
-        buyer_cpf = [int(d) for d in temp_cpf]
+        buyer_cpf = [int(d) for d in cpf]
 
         verified_cpf = buyer_cpf[:9]
 
@@ -33,7 +33,7 @@ class Utils(object):
             verified_cpf = Utils.__append_cpf_residue(verified_cpf)
 
         if verified_cpf == buyer_cpf:
-            return cpf
+            return cpf[:3] + "." + cpf[3:6] + "." + cpf[6:9] + "-" + cpf[9:]
 
         return False
 
@@ -58,6 +58,9 @@ class Utils(object):
     def validate_card(card_number):
         card = Utils.__treat_card_number(card_number)
 
+        if card == False:
+            return card
+
         odd_card = card[:len(card) - 1]
         even_numbers = card[1::2]
         odd_numbers = odd_card[-1::-2]
@@ -77,6 +80,7 @@ class Utils(object):
             sum += even_numbers[i]
 
         if sum % 10 == 0:
+            card_number = ''.join(str(e) for e in card)
             return card_number
         else:
             return False
@@ -95,6 +99,9 @@ class Utils(object):
     @staticmethod
     def get_card_issuer(card_number):
         card = Utils.__treat_card_number(card_number)
+
+        if card == False:
+            return card
 
         if card[0] == 4:
             return 'Visa'

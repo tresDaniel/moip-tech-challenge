@@ -46,13 +46,3 @@ class Payment(object):
     def boleto_payment():
         boleto_code = Utils.__generate_boleto()
         return boleto_code
-
-    @classmethod
-    def get_by_id(cls, id):
-        payment_data = Database.find_one(collection='payments', query={'_id': id})
-        return cls(**payment_data)
-
-    @classmethod
-    def find_by_client_id(cls, client_id):
-        payments = Database.find(collection='payments', query={'client_id': client_id})
-        return [cls(**payment) for payment in payments]

@@ -60,4 +60,8 @@ To run the unit tests, you'll just need to run:
 > python -m unittest
 
 
+### Documentation
 
+The API Documentation can be seen here:
+
+https://documenter.getpostman.com/view/1879456/RWEfNfNN

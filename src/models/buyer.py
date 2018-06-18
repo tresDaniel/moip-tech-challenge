@@ -1,6 +1,6 @@
 import uuid
 from common.database import Database
-import common.errors as Errors
+import src.common.errors as Errors
 
 
 class Buyer(object):
@@ -23,17 +23,18 @@ class Buyer(object):
         }
 
     @classmethod
-    def check_buyers(cls, temp_buyer):
-        if temp_buyer.cpf is False:
+    def check_buyers(cls, buyer_name, buyer_email, buyer_cpf):
+        if buyer_cpf is False:
             raise Errors.InvalidCpfError("The informed CPF is not valid.")
-        elif temp_buyer.email is False:
+        elif buyer_email is False:
             raise Errors.InvalidEmailError("The informed email is not valid.")
 
-        if Buyer.__find_by_cpf(temp_buyer.cpf):
-            buyer = Buyer.__find_by_cpf(temp_buyer.cpf)
+        if Buyer.__find_by_cpf(buyer_cpf):
+            buyer = Buyer.__find_by_cpf(buyer_cpf)
             return buyer
         else:
-            buyer = Buyer.__register(temp_buyer)
+            buyer = Buyer(buyer_name, buyer_email, buyer_cpf)
+            Buyer.__register(buyer)
             return buyer
 
     def __register(self):

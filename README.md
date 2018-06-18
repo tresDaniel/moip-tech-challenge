@@ -22,7 +22,7 @@ First, execute your MongoDB Server that by default must be on the folder:
 > Program Files/MongoDB/Server/x.x/bin/mongod.exe
 
 Then you'll have to start a new database executing:
-> Program Files/MongoDB/Server/x.x/bin/mongod.exe
+> Program Files/MongoDB/Server/x.x/bin/mongo.exe
 
 And running the code on the terminal:
 > use challenge
@@ -49,7 +49,7 @@ so you can install the application requirements, using:
 
 At the end just run
 
-> py src/run.py
+> python src/run.py
 
 and your application should be up and running.
 
@@ -57,7 +57,7 @@ and your application should be up and running.
 
 To run the unit tests, you'll just need to run:
 
-> 
+> python -m unittest
 
 
 

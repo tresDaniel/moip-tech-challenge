@@ -20,8 +20,7 @@ def payment():
         buyer_cpf = Utils.validate_cpf(request.form['buyer_cpf'])
 
         try:
-            temp_buyer = Buyer(buyer_name, buyer_email, buyer_cpf)
-            buyer = Buyer.check_buyers(temp_buyer)
+            buyer = Buyer.check_buyers(buyer_name, buyer_email, buyer_cpf)
         except Errors.Error as e:
             return e.message
 
@@ -37,15 +36,16 @@ def payment():
             card_cvv = request.form['card_cvv']
 
             try:
-                temp_card = Card(card_holder_name, card_number, card_expiration_date, card_cvv)
-                card = Card.check_cards(temp_card)
+                card = Card.check_cards(card_holder_name, card_number, card_expiration_date, card_cvv)
             except Errors.Error as e:
                 return e.message
 
             payment = Payment(client_id, payment_type, payment_amount, buyer, card)
             payment_status = Payment.register(payment)
 
-            return redirect(url_for(".card_payment", status=payment_status))
+            card_issuer = Utils.get_card_issuer(card_number)
+
+            return redirect(url_for(".card_payment", status=payment_status, issuer=card_issuer))
 
 
 @payment_blueprint.route('/boleto')
@@ -55,10 +55,10 @@ def boleto_payment():
     return boleto_number
 
 
-@payment_blueprint.route('/card/<status>')
-def card_payment(status):
+@payment_blueprint.route('/card/<status>/<issuer>')
+def card_payment(status, issuer):
     if status == 'success':
-        return "Your payment was successful."
+        return "Your payment was successful using a {} card".format(issuer)
     elif status == 'fail':
         return "Your payment has failed."
 

@@ -34,8 +34,9 @@ class Utils(object):
 
         if verified_cpf == buyer_cpf:
             return cpf[:3] + "." + cpf[3:6] + "." + cpf[6:9] + "-" + cpf[9:]
-
-        return False
+        else:
+            cpf = False
+            return cpf
 
     @staticmethod
     def __append_cpf_residue(verified_cpf):
@@ -58,7 +59,7 @@ class Utils(object):
     def validate_card(card_number):
         card = Utils.__treat_card_number(card_number)
 
-        if card == False:
+        if card is False:
             return card
 
         odd_card = card[:len(card) - 1]
@@ -100,7 +101,7 @@ class Utils(object):
     def get_card_issuer(card_number):
         card = Utils.__treat_card_number(card_number)
 
-        if card == False:
+        if card is False:
             return card
 
         if card[0] == 4:

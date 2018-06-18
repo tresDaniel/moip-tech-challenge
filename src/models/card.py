@@ -1,6 +1,6 @@
 import uuid
 from common.database import Database
-import common.errors as Errors
+import src.common.errors as Errors
 
 
 class Card(object):
@@ -25,15 +25,16 @@ class Card(object):
         }
 
     @classmethod
-    def check_cards(cls, temp_card):
-        if temp_card.card_number is False:
-            raise Errors.InvalidCpfError("The informed card is not valid.")
+    def check_cards(cls, card_holder_name, card_number, card_expiration_date, card_cvv):
+        if card_number is False:
+            raise Errors.InvalidCardError("The informed card is not valid.")
 
-        if Card.__find_by_card_number(temp_card.card_number):
-            card = Card.__find_by_card_number(temp_card.card_number)
+        if Card.__find_by_card_number(card_number):
+            card = Card.__find_by_card_number(card_number)
             return card
         else:
-            card = Card.__register(temp_card)
+            card = Card(card_holder_name, card_number, card_expiration_date, card_cvv)
+            Card.__register(card)
             return card
 
     def __register(self):

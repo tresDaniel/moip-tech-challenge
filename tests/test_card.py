@@ -1,5 +1,4 @@
 from unittest import TestCase
-from src.models.card import Card
 
 
 class TestCard(TestCase):

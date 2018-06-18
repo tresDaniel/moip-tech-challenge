@@ -12,5 +12,5 @@ def init():
     session['client_id'] = '0x4D3EfAb6C'
 
 
-from src.models.payments.views import payment_blueprint
+from api.api_payment import payment_blueprint
 app.register_blueprint(payment_blueprint, url_prefix="/payments")

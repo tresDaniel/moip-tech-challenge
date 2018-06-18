@@ -1,6 +1,6 @@
 import uuid
-from src.common.database import Database
-import src.common.errors as Errors
+from common.database import Database
+import common.errors as Errors
 
 
 class Card(object):

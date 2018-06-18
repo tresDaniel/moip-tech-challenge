@@ -1,5 +1,5 @@
 from flask import Flask, session
-from src.common.database import Database
+from common.database import Database
 
 app = Flask(__name__)
 app.config.from_object('config')

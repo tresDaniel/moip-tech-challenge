@@ -1,6 +1,6 @@
 import uuid, re
-from src.common.database import Database
-from src.common.utils import Utils
+from common.database import Database
+from common.utils import Utils
 
 
 class Payment(object):

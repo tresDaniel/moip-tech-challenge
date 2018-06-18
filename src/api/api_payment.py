@@ -1,9 +1,9 @@
 from flask import Blueprint, request, url_for, session
 from werkzeug.utils import redirect
 
-from src.common.utils import Utils
-from src.models.buyer import Buyer, Errors
-from src.models.card import Card
+from common.utils import Utils
+from models.buyer import Buyer, Errors
+from models.card import Card
 from models.payment import Payment
 
 payment_blueprint = Blueprint('payments', __name__)

@@ -5,7 +5,7 @@ from random import randint
 class Utils(object):
 
     @staticmethod
-    def __generate_boleto():
+    def generate_boleto():
         boleto_number = Utils.__random_with_n_digits(5) + "." + Utils.__random_with_n_digits(5) + " " + Utils.__random_with_n_digits(5) + "." + \
                    Utils.__random_with_n_digits(6) + " " + Utils.__random_with_n_digits(5) + "." + Utils.__random_with_n_digits(6) + " " + \
                    Utils.__random_with_n_digits(1) + " " + Utils.__random_with_n_digits(15)

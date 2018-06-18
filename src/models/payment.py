@@ -44,5 +44,5 @@ class Payment(object):
 
     @staticmethod
     def boleto_payment():
-        boleto_code = Utils.__generate_boleto()
+        boleto_code = Utils.generate_boleto()
         return boleto_code

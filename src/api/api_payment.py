@@ -2,6 +2,7 @@ from flask import Blueprint, request, url_for, session
 from werkzeug.utils import redirect
 
 from common.utils import Utils
+from common.utils import CardValidators
 from models.buyer import Buyer, Errors
 from models.card import Card
 from models.payment import Payment
@@ -31,7 +32,7 @@ def payment():
             return redirect(url_for(".boleto_payment"))
         elif payment_type == 'Card':
             card_holder_name = request.form['card_holder_name']
-            card_number = Utils.validate_card(request.form['card_number'])
+            card_number = CardValidators.validate_card(request.form['card_number'])
             card_expiration_date = request.form['card_expiration_date']
             card_cvv = request.form['card_cvv']
 
@@ -43,7 +44,7 @@ def payment():
             payment = Payment(client_id, payment_type, payment_amount, buyer, card)
             payment_status = Payment.register(payment)
 
-            card_issuer = Utils.get_card_issuer(card_number)
+            card_issuer = CardValidators.get_card_issuer(card_number)
 
             return redirect(url_for(".card_payment", status=payment_status, issuer=card_issuer))
 
